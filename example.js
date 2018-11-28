@@ -3,8 +3,12 @@ const {promisify} = require('util')
 
 const readdir = promisify(fs.readdir)
 const readFile = promisify(fs.readFile)
+const writeFile = promisify(fs.writeFile)
 const progress = require('cli-progress')
-const {getHashes, compareHashes} = require('.');
+const {getHashes, compareHashes} = require('.')
+
+const SAVE_HASHES = 'example-hashes.json'
+const SAVE_SIMILAR = 'example-similar.json';
 
 (async () => {
 	const ICONS_DIR = './node_modules/@mdi/svg/svg'
@@ -18,7 +22,6 @@ const {getHashes, compareHashes} = require('.');
 	}, progress.Presets.rect)
 
 	console.log('Rendering...')
-
 	bar.start(items.length, 0)
 
 	const toSVG = file => {
@@ -27,16 +30,15 @@ const {getHashes, compareHashes} = require('.');
 	}
 
 	const hashes = await getHashes({items, toSVG})
-
 	bar.stop()
-
+	console.log('Saving...', SAVE_HASHES)
+	await writeFile(SAVE_HASHES, JSON.stringify(hashes))
 	console.log('Comparing...')
-
 	const onStart = length => bar.start(length, 0)
 	const onCompare = () => bar.increment(1)
-	const compared = await compareHashes({hashes, onStart, onCompare})
-
+	const similar = await compareHashes({hashes, onStart, onCompare})
 	bar.stop()
-
-	console.log(`Found ${compared.length} similar matches.`)
+	console.log('Saving...', SAVE_SIMILAR)
+	await writeFile(SAVE_SIMILAR, JSON.stringify(similar))
+	console.log(`Found ${similar.length} similar matches.`)
 })()
