@@ -8,6 +8,10 @@
 $ yarn add -D darosh/similar-icons
 ```
 
+## Usage
+
+See [test.js](./test.js) and [example.js](./example.js)
+
 ## Development
 
 ```
@@ -15,3 +19,7 @@ $ yarn
 $ yarn test
 $ yarn example
 ```
+
+Then open [example.html](./example.html) in a browser:
+
+![](./poster.png)
