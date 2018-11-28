@@ -81,7 +81,7 @@ function lineToHex(buf, start, size) {
 	const x = Math.floor(start / size)
 
 	for (let i = 0; i < 4; i++) {
-		v += buf[start + i] && (buf[start + i] === 255 || (i ^ x) % 2) ? 0 : 2 ** i
+		v += buf[start + i] && (buf[start + i] === 255 || (i ^ x) % 2) ? 0 : 2 ** (3 - i)
 	}
 
 	return v.toString(16)
