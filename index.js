@@ -6,6 +6,7 @@ const eachLimit = require('async/eachLimit')
 const DEFAULT_PARALLEL_LIMIT = os.cpus().length
 const DEFAULT_ICON_SIZE = 24
 const DEFAULT_PIXEL_LIMIT = (DEFAULT_ICON_SIZE ** 2) / 6
+const DEFAULT_GRAY_THRESHOLD = 224
 
 exports.compareHashes = compareHashes
 exports.getHashes = getHashes
@@ -14,7 +15,8 @@ function getHashes({
 	items,
 	toSVG,
 	limit = DEFAULT_PARALLEL_LIMIT,
-	size = DEFAULT_ICON_SIZE
+	size = DEFAULT_ICON_SIZE,
+  threshold = DEFAULT_GRAY_THRESHOLD
 }) {
 	return new Promise((resolve, reject) => {
 		mapLimit(items, limit, async item => {
@@ -23,7 +25,7 @@ function getHashes({
 			const hasOpacity = svg.includes('opacity')
 
 			if (!hasOpacity) {
-				render = render.threshold(224)
+				render = render.threshold(threshold)
 			}
 
 			const buf = await render.raw().toBuffer()
