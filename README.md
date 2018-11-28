@@ -7,3 +7,11 @@
 ```
 $ yarn add -D darosh/similar-icons
 ```
+
+## Development
+
+```
+$ yarn
+$ yarn test
+$ yarn example
+```
