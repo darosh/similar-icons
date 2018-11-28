@@ -1,0 +1,76 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Similar Icons Visual Test</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>Similar Icons Visual Test</h1>
+
+    <h2>Dithering sample</h2>
+    <x-hash :hash="ditheringSample"></x-hash>
+
+    <h2>B&ampW hashes</h2>
+    <x-hash v-for="v in hashes" :hash="v.hash"></x-hash>
+  </div>
+
+  <script id="x-hash" type="text/x-template">
+    <canvas width="24" height="24"></canvas>
+  </script>
+
+  <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
+  <script>
+    Vue.component('x-hash', {
+      template: '#x-hash',
+      props: ['hash'],
+      mounted() {
+        const ctx = this.$el.getContext('2d')
+        const id = ctx.getImageData(0, 0, 24, 24)
+        const d = id.data
+        let c = 0
+
+        for (let i = 0; i < this.hash.length; i += 8) {
+          const s = this.hash.substring(i, i + 8)
+          let n = parseInt(s, 16)
+
+          console.log(s, n)
+          for (let b = 0; b < 32; b++) {
+            if ((n & 0x80000000) !== 0) {
+              d[c++] = 0
+              d[c++] = 0
+              d[c++] = 0
+              d[c++] = 255
+            } else {
+              c += 4
+            }
+
+            n = n << 1
+          }
+        }
+
+        ctx.putImageData(id, 0, 0, 0, 0, 24, 24)
+      }
+    })
+
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          ditheringSample: '00000000000000280000140000aa8001550000aa8001550000aa8001550000a28001450000a28001410001a38001e78001eb8001e78001ef8001ff8000ff80017f00000000000000',
+          hashes: []
+        }
+      },
+      async created() {
+        this.hashes = await fetch('./example-hashes.json').then(result => result.json())
+        this.similar = await fetch('./example-similar.json').then(result => result.json())
+      }
+    })
+
+  </script>
+</body>
+
+</html>
