@@ -15,7 +15,13 @@
     <x-hash :hash="ditheringSample"></x-hash>
 
     <h2>B&ampW hashes</h2>
-    <x-hash v-for="v in hashes" :hash="v.hash"></x-hash>
+
+    <div v-for="(v, k) in hashes">
+      <x-hash :hash="v.hash"></x-hash>
+      <x-hash :title="s[1]" :hash="hashes[s[0]].hash" v-for="s in look[k]" :color="164"></x-hash>
+
+      <hr>
+    </div>
   </div>
 
   <script id="x-hash" type="text/x-template">
@@ -26,23 +32,23 @@
   <script>
     Vue.component('x-hash', {
       template: '#x-hash',
-      props: ['hash'],
+      props: ['hash', 'color'],
       mounted() {
         const ctx = this.$el.getContext('2d')
         const id = ctx.getImageData(0, 0, 24, 24)
         const d = id.data
         let c = 0
+        const h = this.color || 0
 
         for (let i = 0; i < this.hash.length; i += 8) {
           const s = this.hash.substring(i, i + 8)
           let n = parseInt(s, 16)
 
-          console.log(s, n)
           for (let b = 0; b < 32; b++) {
             if ((n & 0x80000000) !== 0) {
-              d[c++] = 0
-              d[c++] = 0
-              d[c++] = 0
+              d[c++] = h
+              d[c++] = h
+              d[c++] = h
               d[c++] = 255
             } else {
               c += 4
@@ -61,12 +67,24 @@
       data() {
         return {
           ditheringSample: '00000000000000280000140000aa8001550000aa8001550000aa8001550000a28001450000a28001410001a38001e78001eb8001e78001ef8001ff8000ff80017f00000000000000',
-          hashes: []
+          hashes: [],
+          look: {}
         }
       },
       async created() {
         this.hashes = await fetch('./example-hashes.json').then(result => result.json())
         this.similar = await fetch('./example-similar.json').then(result => result.json())
+
+        this.look = this.similar.reduce((acc, pair) => {
+          acc[pair[0]] = acc[pair[0]] || []
+          acc[pair[0]].push([pair[1], pair[2]])
+          acc[pair[1]] = acc[pair[1]] || []
+          acc[pair[1]].push([pair[0], pair[2]])
+
+          return acc
+        }, {})
+
+        Object.values(this.look).forEach(list => list.sort((a, b) => a[1] - b[1]))//.splice(24))
       }
     })
 
