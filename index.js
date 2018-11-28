@@ -5,7 +5,7 @@ const eachLimit = require('async/eachLimit')
 
 const DEFAULT_PARALLEL_LIMIT = os.cpus().length
 const DEFAULT_ICON_SIZE = 24
-const DEFAULT_PIXEL_LIMIT = (DEFAULT_ICON_SIZE ** 2) / 6
+const DEFAULT_PIXEL_LIMIT = (DEFAULT_ICON_SIZE ** 2) / 8
 const DEFAULT_GRAY_THRESHOLD = 224
 
 exports.compareHashes = compareHashes
