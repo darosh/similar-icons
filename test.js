@@ -65,3 +65,16 @@ test('compare progress report', async t => {
 
 	t.is(calls, expectedCalls)
 })
+
+test('compare same icons', async t => {
+	const hashes = await getHashes({
+		items: [SVG_A, SVG_A],
+		toSVG: svg => svg
+	})
+
+	const similar = await compareHashes({
+		hashes
+	})
+
+	t.deepEqual(similar, [[0, 1, 0]])
+})
