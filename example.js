@@ -4,17 +4,18 @@ const {promisify} = require('util')
 const readdir = promisify(fs.readdir)
 const readFile = promisify(fs.readFile)
 const progress = require('cli-progress')
-const {getHashes, compareHashes} = require('.')
+const {getHashes, compareHashes} = require('.');
 
-const bar = new progress.Bar({
-	etaBuffer: 8,
-	barsize: 10,
-	hideCursor: true,
-	format: '[{bar}] {percentage}% | {eta}s | {value}/{total} | {duration}s'
-}, progress.Presets.rect);
 (async () => {
 	const ICONS_DIR = './node_modules/@mdi/svg/svg'
 	const items = await readdir(ICONS_DIR)
+
+	const bar = new progress.Bar({
+		etaBuffer: 8,
+		barsize: 10,
+		hideCursor: true,
+		format: '[{bar}] {percentage}% | {eta}s | {value}/{total} | {duration}s'
+	}, progress.Presets.rect)
 
 	console.log('Rendering...')
 
