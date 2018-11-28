@@ -16,7 +16,7 @@ function getHashes({
 	toSVG,
 	limit = DEFAULT_PARALLEL_LIMIT,
 	size = DEFAULT_ICON_SIZE,
-  threshold = DEFAULT_GRAY_THRESHOLD
+	threshold = DEFAULT_GRAY_THRESHOLD
 }) {
 	return new Promise((resolve, reject) => {
 		mapLimit(items, limit, async item => {
