@@ -44,3 +44,24 @@ test('opacity hash', async t => {
 
 	t.deepEqual(hashes, [HASH_OPACITY])
 })
+
+test('compare progress report', async t => {
+	const items = [SVG_A, SVG_B]
+	let calls = 0
+	let expectedCalls
+
+	const hashes = await getHashes({
+		items,
+		toSVG: svg => svg
+	})
+
+	await compareHashes({
+		hashes,
+		onStart: length => {
+			expectedCalls = length
+		},
+		onCompare: () => calls++
+	})
+
+	t.is(calls, expectedCalls)
+})
