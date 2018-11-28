@@ -1,2 +1,3 @@
-# similar-icons
-Similar SVG icons utils
+# similar-icons [![Build Status](https://travis-ci.org/darosh/similar-icons.svg?branch=master)](https://travis-ci.org/darosh/similar-icons) [![Coverage Status](https://coveralls.io/repos/github/darosh/similar-icons/badge.svg?branch=master)](https://coveralls.io/github/darosh/similar-icons?branch=master)
+
+> Similar SVG icons utils
