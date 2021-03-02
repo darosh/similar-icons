@@ -172,7 +172,7 @@ function getDelta({a, b, limit}) {
 	let d = 0
 
 	for (let i = 0; i < a.length; i += 8) {
-		d += countBits(Number.parseInt(a.slice(i, 8), 16) ^ Number.parseInt(b.slice(i, 8), 16))
+		d += countBits(Number.parseInt(a.slice(i, i + 8), 16) ^ Number.parseInt(b.slice(i, i + 8), 16))
 
 		if (d >= limit) {
 			return d

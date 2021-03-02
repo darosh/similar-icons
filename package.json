@@ -35,6 +35,6 @@
   "repository": "darosh/similar-icons",
   "scripts": {
     "example": "node example.js",
-    "test": "xo --fix --no-semicolon && nyc ava --es-module"
+    "test": "xo --fix --no-semicolon && nyc ava"
   }
 }
