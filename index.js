@@ -36,9 +36,9 @@ function getHashes({
 				hash,
 				pixels
 			}
-		}, (err, results) => {
-			if (err) {
-				reject(err)
+		}, (error, results) => {
+			if (error) {
+				reject(error)
 			} else {
 				resolve(results)
 			}
@@ -60,7 +60,7 @@ async function toGray(svg, size) {
 			}
 		}
 	})
-		.overlayWith(Buffer.from(svg))
+		.composite([{input: Buffer.from(svg)}])
 		.png()
 		.toBuffer()
 		.catch(error => console.error(error))
@@ -73,6 +73,7 @@ async function toGray(svg, size) {
 }
 
 function toHash(buf, size) {
+	// eslint-disable-next-line unicorn/no-new-array
 	return (new Array(buf.length / 4).fill(0)).map((d, i) => lineToHex(buf, i * 4, size)).join('')
 }
 
@@ -157,9 +158,9 @@ function parallelCompare(toCompare, hashes, parallel, onCompare) {
 			}
 
 			return callback()
-		}, err => {
-			if (err) {
-				reject(err)
+		}, error => {
+			if (error) {
+				reject(error)
 			} else {
 				resolve(similar)
 			}
@@ -171,7 +172,7 @@ function getDelta({a, b, limit}) {
 	let d = 0
 
 	for (let i = 0; i < a.length; i += 8) {
-		d += countBits(parseInt(a.substr(i, 8), 16) ^ parseInt(b.substr(i, 8), 16))
+		d += countBits(Number.parseInt(a.slice(i, 8), 16) ^ Number.parseInt(b.slice(i, 8), 16))
 
 		if (d >= limit) {
 			return d
